@@ -1,0 +1,23 @@
+<form [formGroup]="catForm" (ngSubmit)="search()">
+  <mat-form-field>
+    <mat-label>Breed</mat-label>
+    <mat-select formControlName="breed" (ngModelChange)="search()">
+      <mat-option value="">All Breeds</mat-option>
+      <mat-option *ngFor="let breed of breeds$ | async" [value]="breed.id">
+        {{ breed.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="small-mat-form-field">
+    <mat-label>Limit</mat-label>
+    <input matInput type="number" (ngModelChange)="search()" formControlName="limit"/>
+  </mat-form-field>
+
+
+  <button class="form_button" mat-flat-button type="submit">Search</button>
+</form>
+
+<div class="cat-images">
+  <img *ngFor="let cat of cats$ | async" [src]="cat.url" alt="Cat Image" />
+</div>
