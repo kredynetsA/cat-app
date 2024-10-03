@@ -17,13 +17,15 @@ export class SearchCats {
 export interface CatStateModel {
   breeds: Breed[];
   cats: CatImage[];
+  loading: boolean;
 }
 
 @State<CatStateModel>({
   name: 'cats',
   defaults: {
     breeds: [],
-    cats: []
+    cats: [],
+    loading: false
   }
 })
 @Injectable()
@@ -40,17 +42,24 @@ export class CatSearchState {
     return state.cats;
   }
 
+  @Selector()
+  static loading(state: CatStateModel) {
+    return state.loading;
+  }
+
   @Action(GetBreeds)
   getBreeds(ctx: StateContext<CatStateModel>) {
+    ctx.patchState({ loading: true });
     return this.http.get<Breed[]>('https://api.thecatapi.com/v1/breeds').pipe(
       tap((breeds: Breed[]) => {
-        ctx.patchState({ breeds });
+        ctx.patchState({ breeds, loading: false });
       })
     );
   }
 
   @Action(SearchCats)
   searchCats(ctx: StateContext<CatStateModel>, action: SearchCats) {
+    ctx.patchState({ loading: true });
     const { breed, limit } = action;
     const params = {
       breed_id: breed || '',
@@ -63,7 +72,7 @@ export class CatSearchState {
       })
       .pipe(
         tap((cats: CatImage[]) => {
-          ctx.patchState({ cats });
+          ctx.patchState({ cats, loading: false });
         })
       );
   }

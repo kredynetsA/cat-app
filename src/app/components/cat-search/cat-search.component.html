@@ -1,3 +1,5 @@
+
+
 <form [formGroup]="catForm" (ngSubmit)="search()">
   <mat-form-field>
     <mat-label>Breed</mat-label>
@@ -18,6 +20,12 @@
   <button class="form_button" mat-flat-button type="submit">Search</button>
 </form>
 
+<div *ngIf="loading$ | async" class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>
+
 <div class="cat-images">
   <img *ngFor="let cat of cats$ | async" [src]="cat.url" alt="Cat Image" />
 </div>
+
+

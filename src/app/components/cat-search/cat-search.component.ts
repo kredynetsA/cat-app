@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-cat-search',
@@ -17,7 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     CommonModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinner
   ],
   templateUrl: './cat-search.component.html',
   styleUrl: './cat-search.component.scss'
@@ -26,10 +28,12 @@ export class CatSearchComponent {
   catForm!: FormGroup;
   breeds$: any;
   cats$: any;
+  loading$: any;
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.breeds$ = this.store.select(state => state.cats.breeds);
     this.cats$ = this.store.select(state => state.cats.cats);
+    this.loading$ = this.store.select(state => state.cats.loading);
   }
 
   ngOnInit(): void {
